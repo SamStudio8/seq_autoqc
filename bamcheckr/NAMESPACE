@@ -1,2 +1,2 @@
 import(plyr, reshape2, ggplot2, caTools, stringr)
-export(read_bamcheck, write_bamcheck, indel_peaks, base_content_deviation, quality_dropoff, qc_additional_sn)
+export(read_bamcheck, write_bamcheck, indel_peaks, base_content_deviation, quality_dropoff, ratio_pcts)

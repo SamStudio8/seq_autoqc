@@ -156,7 +156,7 @@ bamcheck$data$SN <- rbind(bamcheck$data$SN,
                             baseline_method = options_args$options[["base-content-baseline-method"]],
                             runmed_k = options_args$options[["base-content-runmed-k"]],
                             outplotbase = options_args$options[["plot-base-path"]]),
-    qc_additional_sn(bamcheck = bamcheck))
+    ratio_pcts(bamcheck = bamcheck))
 
 # add provenance notes to header
 bamcheck$comments$HEADER <- append(bamcheck$comments$HEADER, "# It was modified by bamcheck_augment_summary.R")

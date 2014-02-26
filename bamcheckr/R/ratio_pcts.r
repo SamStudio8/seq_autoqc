@@ -1,5 +1,5 @@
 ###############################################################################
-# qc_additional_sn.r
+# ratio_pcts.r
 ###############################################################################
 #
 # Copyright (c) 2014 Genome Research Ltd.
@@ -21,7 +21,7 @@
 #
 ###############################################################################
 
-qc_additional_sn <- function(bamcheck) {
+ratio_pcts <- function(bamcheck) {
 
     summary_numbers <- bamcheck$data$SN
     indel_distribution <- bamcheck$data$ID
@@ -32,20 +32,40 @@ qc_additional_sn <- function(bamcheck) {
                                                         as.numeric(summary_numbers[summary_numbers[1] == "reads duplicated:"][2]))
     insertions_to_deletions_ratio <- ins_to_del_ratio(indel_distribution)
     overlapping_base_duplicate_percentage <- overlapping_base_duplicate_pct(read_lengths, insert_sizes)
+    max_max_baseline_deviation <- max_max_baseline_deviation_pct(as.numeric(summary_numbers[summary_numbers[1] == "A.percent.total.mean.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "C.percent.total.mean.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "T.percent.total.mean.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "G.percent.total.mean.baseline.deviation:"][2]))
+
+    max_total_mean_baseline_deviation <- max_total_mean_baseline_deviation_pct(as.numeric(summary_numbers[summary_numbers[1] == "A.percent.max.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "C.percent.max.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "T.percent.max.baseline.deviation:"][2]),
+                                                             as.numeric(summary_numbers[summary_numbers[1] == "G.percent.max.baseline.deviation:"][2]))
 
     outdata <- data.frame(
                     variable = c("duplicate.read.percentage:",
                                  "ins.to.del.ratio:",
-                                 "overlapping.base.duplicate.percent:"
+                                 "overlapping.base.duplicate.percent:",
+                                 "max.max.baseline.deviation:",
+                                 "max.total.mean.baseline.deviation:"
                     ),
                     value = c(duplicated_reads_percentage,
                               insertions_to_deletions_ratio,
-                              overlapping_base_duplicate_percentage
+                              overlapping_base_duplicate_percentage,
+                              max_max_baseline_deviation,
+                              max_total_mean_baseline_deviation
                     ))
     return(outdata)
 }
 
 ###############################################################################
+max_total_mean_baseline_deviation_pct <- function(a, c, t, g){
+    return (max(a,c,t,g))
+}
+max_max_baseline_deviation_pct <- function(a, c, t, g){
+    return (max(a,c,t,g))
+}
+
 duplicated_reads_pct <- function(mapped_reads, duplicated_reads){
     return (100.00 * duplicated_reads / mapped_reads)
 }
